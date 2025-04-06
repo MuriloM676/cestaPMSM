@@ -58,15 +58,36 @@ def login():
         return 'Usuário ou senha inválidos'
     return render_template('login.html')
 
-# Dashboard
+# Dashboard com filtros
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     if not session.get('logged_in'):
         return redirect('/login')
+    
+    # Parâmetros de filtro
+    nome_filtro = request.args.get('nome', '').strip()
+    status_filtro = request.args.get('status', 'todos')  # 'todos', 'retirada', 'nao_retirada'
+
     conn = get_db()
-    beneficiarios = conn.execute('SELECT * FROM beneficiarios').fetchall()
+    query = 'SELECT * FROM beneficiarios WHERE 1=1'
+    params = []
+
+    # Filtro por nome
+    if nome_filtro:
+        query += ' AND nome LIKE ?'
+        params.append(f'%{nome_filtro}%')
+
+    # Filtro por status da cesta
+    if status_filtro == 'retirada':
+        query += ' AND cesta_retirada = 1'
+    elif status_filtro == 'nao_retirada':
+        query += ' AND cesta_retirada = 0'
+
+    beneficiarios = conn.execute(query, params).fetchall()
     conn.close()
-    return render_template('dashboard.html', beneficiarios=beneficiarios)
+    
+    return render_template('dashboard.html', beneficiarios=beneficiarios, 
+                          nome_filtro=nome_filtro, status_filtro=status_filtro)
 
 # Cadastro de beneficiário
 @app.route('/cadastrar', methods=['POST'])

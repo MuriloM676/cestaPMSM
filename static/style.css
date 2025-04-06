@@ -124,3 +124,38 @@ body > * {
     margin-left: auto;
     margin-right: auto;
 }
+
+/* Estilizar o select */
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+/* Ajustar o formulário de filtros */
+form[action="/dashboard"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+form[action="/dashboard"] label {
+    margin-bottom: 0;
+}
+
+form[action="/dashboard"] input[type="text"] {
+    width: 200px;
+}
+
+form[action="/dashboard"] select {
+    width: 150px;
+}
+
+form[action="/dashboard"] button {
+    width: auto;
+    padding: 8px 15px;
+}
