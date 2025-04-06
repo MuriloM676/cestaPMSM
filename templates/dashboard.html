@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Gestão de Cestas Básicas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Gestão de Cestas Básicas</h1>
+    
+    <!-- Formulário de Cadastro -->
+    <h2>Cadastrar Novo Beneficiário</h2>
+    <form method="POST" action="/cadastrar">
+        <label>Nome:</label>
+        <input type="text" name="nome" required>
+        <label>Telefone:</label>
+        <input type="text" name="telefone" required>
+        <label>Endereço:</label>
+        <textarea name="endereco" required></textarea>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <!-- Lista de Beneficiários -->
+    <h2>Beneficiários Cadastrados</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Endereço</th>
+            <th>Cesta Retirada</th>
+            <th>Ação</th>
+        </tr>
+        {% for beneficiario in beneficiarios %}
+        <tr>
+            <td>{{ beneficiario['id'] }}</td>
+            <td>{{ beneficiario['nome'] }}</td>
+            <td>{{ beneficiario['telefone'] }}</td>
+            <td>{{ beneficiario['endereco'] }}</td>
+            <td>{{ 'Sim' if beneficiario['cesta_retirada'] else 'Não' }}</td>
+            <td>
+                {% if not beneficiario['cesta_retirada'] %}
+                <form method="POST" action="/marcar_retirada/{{ beneficiario['id'] }}">
+                    <button type="submit">Marcar como Retirada</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Botão de Logout -->
+    <a href="/logout">Sair</a>
+</body>
+</html>
