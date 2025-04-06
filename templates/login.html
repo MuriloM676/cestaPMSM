@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Gestão de Cestas Básicas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Login</h1>
+    {% if error %}
+    <div class="error-message">
+        <span>⚠️</span> {{ error }}
+    </div>
+    {% endif %}
     <form method="POST" action="/login">
-        <label>Usuário:</label>
-        <input type="text" name="username" required>
-        <label>Senha:</label>
-        <input type="password" name="password" required>
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
         <button type="submit">Entrar</button>
     </form>
 </body>

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Gestão de Cestas Básicas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Gestão de Cestas Básicas</h1>
+    <h1>Dashboard</h1>
     
-    <!-- Formulário de Cadastro -->
+    <!-- Formulário de Cadastro (apenas para administradores) -->
+    {% if session['role'] == 'admin' %}
     <div class="section-title">
         <h2>Cadastrar Novo Beneficiário</h2>
     </div>
@@ -26,10 +28,12 @@
         <textarea name="endereco" required></textarea>
         <button type="submit">Cadastrar</button>
     </form>
-
+    {% endif %}
+    
     <!-- Filtros -->
     <div class="section-title">
         <h2>Beneficiários Cadastrados</h2>
+        <a href="{{ url_for('historico') }}" class="history-link">Ver Histórico de Retiradas</a>
     </div>
     <form method="GET" action="/dashboard" class="filter-form">
         <div class="filter-group">
@@ -53,35 +57,51 @@
         </div>
     </form>
 
-    <!-- Lista de Beneficiários -->
+    <!-- Tabela de beneficiários -->
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <th>Endereço</th>
-            <th>Cesta Retirada</th>
-            <th>Ação</th>
-        </tr>
-        {% for beneficiario in beneficiarios %}
-        <tr>
-            <td>{{ beneficiario['id'] }}</td>
-            <td>{{ beneficiario['nome'] }}</td>
-            <td>{{ beneficiario['telefone'] }}</td>
-            <td>{{ beneficiario['endereco'] }}</td>
-            <td>{{ 'Sim' if beneficiario['cesta_retirada'] else 'Não' }}</td>
-            <td>
-                {% if not beneficiario['cesta_retirada'] %}
-                <form method="POST" action="/marcar_retirada/{{ beneficiario['id'] }}">
-                    <button type="submit">Marcar como Retirada</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>Cesta Retirada</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for beneficiario in beneficiarios %}
+            <tr>
+                <td>{{ beneficiario['id'] }}</td>
+                <td>{{ beneficiario['nome'] }}</td>
+                <td>{{ beneficiario['telefone'] }}</td>
+                <td>{{ beneficiario['endereco'] }}</td>
+                <td>{{ 'Sim' if beneficiario['cesta_retirada'] else 'Não' }}</td>
+                <td>
+                    {% if not beneficiario['cesta_retirada'] %}
+                    <form method="POST" action="{{ url_for('marcar_retirada', id=beneficiario['id']) }}" onsubmit="return confirm('Tem certeza que deseja marcar esta cesta como retirada?');">
+                        <button type="submit">Marcar como Retirada</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <!-- Botão de Logout -->
-    <a href="/logout">Sair</a>
+    
+    <!-- Paginação -->
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('dashboard', page=page-1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}" class="pagination-link">Página Anterior</a>
+        {% endif %}
+        <span>Página {{ page }} de {{ total_pages }}</span>
+        {% if page < total_pages %}
+        <a href="{{ url_for('dashboard', page=page+1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}" class="pagination-link">Próxima Página</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <a href="{{ url_for('logout') }}">Sair</a>
 </body>
 </html>
