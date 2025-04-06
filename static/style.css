@@ -26,8 +26,8 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* Formulários */
-form {
+/* Formulários de Cadastro */
+form:not(.filter-form) {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -125,20 +125,24 @@ body > * {
     margin-right: auto;
 }
 
-/* Estilizar o select */
-select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
+/* Estilo para títulos de seção */
+.section-title {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+}
+
+.section-title h2 {
+    margin: 0;
+    color: #fff;
 }
 
 /* Formulário de filtros */
 .filter-form {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-end; /* Alinha os itens pela base */
     gap: 15px;
     background-color: #fff;
     padding: 15px;
@@ -155,19 +159,21 @@ select {
 
 .filter-group label {
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .filter-group input[type="text"],
 .filter-group select,
 .filter-group button {
     width: 250px;
-    height: 36px;
-    padding: 0 8px;
+    height: 36px; /* Altura fixa para todos os elementos */
+    padding: 0 8px; /* Padding consistente apenas nas laterais */
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 14px;
-    vertical-align: middle;
+    line-height: 1; /* Remove qualquer influência do line-height */
+    margin: 0; /* Remove qualquer margem que possa interferir */
 }
 
 .filter-group select {
@@ -176,52 +182,23 @@ select {
     -moz-appearance: none;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="%23333" d="M0 0h10L5 5z"/></svg>') no-repeat right 10px center;
     background-size: 10px;
-    padding: 0 30px 0 8px; /* Ajusta o padding para a seta */
-    height: 36px; /* Mantém a altura */
-    line-height: normal; /* Remove o line-height para não interferir no dropdown */
-    display: flex;
-    align-items: center;
+    padding-right: 30px; /* Espaço para a seta */
 }
 
 .filter-group button {
     width: 100px;
+    height: 36px; /* Reforça a altura */
+    padding: 0 8px; /* Mesmo padding dos outros elementos */
     background-color: #2ecc71;
     color: #fff;
     border: none;
-    cursor: pointer;
-    padding: 0 8px;
-    line-height: auto;
-}
-
-.filter-group button:hover {
-    background-color: #27ae60;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.filter-group label {
-    margin-bottom: 5px;
-}
-
-.filter-group input[type="text"],
-.filter-group select {
-    width: 200px;
-    padding: 8px;
-    border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-.filter-group button {
-    padding: 8px 15px;
-    background-color: #2ecc71;
-    color: #fff;
-    border: none;
-    border-radius: auto;
     cursor: pointer;
-    height: auto; /* Mesma altura dos inputs para alinhamento */
+    font-size: 14px;
+    line-height: 1; /* Garante consistência */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o texto do botão */
 }
 
 .filter-group button:hover {
