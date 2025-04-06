@@ -121,6 +121,17 @@ def cadastrar():
     conn.close()
     return redirect('/dashboard')
 
+# Marcar cesta como retirada
+@app.route('/marcar_retirada/<int:id>', methods=['POST'])
+def marcar_retirada(id):
+    if not session.get('logged_in'):
+        return redirect('/login')
+    conn = get_db()
+    conn.execute('UPDATE beneficiarios SET cesta_retirada = 1 WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect('/dashboard')
+
 # Logout
 @app.route('/logout')
 def logout():

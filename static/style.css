@@ -161,19 +161,33 @@ select {
 .filter-group select,
 .filter-group button {
     width: 250px;
+    height: 38px; /* Altura fixa para todos os elementos */
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    height: 40px; /* Altura fixa para todos os elementos */
-    box-sizing: border-box; /* Garante que padding e border não afetem a altura */
+    box-sizing: border-box;
+    font-size: 14px; /* Padroniza o tamanho da fonte */
+    line-height: 1; /* Evita que o line-height afete o alinhamento */
+}
+
+.filter-group select {
+    appearance: none; /* Remove o estilo padrão do select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="%23333" d="M0 0h10L5 5z"/></svg>') no-repeat right 10px center;
+    background-size: 10px;
 }
 
 .filter-group button {
-    width: 100px; /* Botão menor que os outros campos */
+    width: 100px;
     background-color: #2ecc71;
     color: #fff;
     border: none;
     cursor: pointer;
+    padding: 0; /* Remove padding para garantir que a altura seja controlada apenas pelo height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filter-group button:hover {
