@@ -58,7 +58,7 @@ def login():
         return 'Usuário ou senha inválidos'
     return render_template('login.html')
 
-# Dashboard com filtros
+# Dashboard
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     if not session.get('logged_in'):
@@ -87,30 +87,36 @@ def dashboard():
     conn.close()
     
     return render_template('dashboard.html', beneficiarios=beneficiarios, 
-                          nome_filtro=nome_filtro, status_filtro=status_filtro)
+                          nome_filtro=nome_filtro, status_filtro=status_filtro,
+                          error_message=request.args.get('error_message', ''))
 
 # Cadastro de beneficiário
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
     if not session.get('logged_in'):
         return redirect('/login')
+    
     nome = request.form['nome']
     telefone = request.form['telefone']
     endereco = request.form['endereco']
+    
     conn = get_db()
+    
+    # Verificar se o telefone já existe
+    existing = conn.execute('SELECT * FROM beneficiarios WHERE telefone = ?', (telefone,)).fetchone()
+    if existing:
+        # Buscar beneficiários para exibir no dashboard
+        beneficiarios = conn.execute('SELECT * FROM beneficiarios').fetchall()
+        conn.close()
+        return render_template('dashboard.html', 
+                             beneficiarios=beneficiarios,
+                             nome_filtro='', 
+                             status_filtro='todos',
+                             error_message='Erro: Este telefone já está cadastrado.')
+    
+    # Se não existe, prosseguir com o cadastro
     conn.execute('INSERT INTO beneficiarios (nome, telefone, endereco) VALUES (?, ?, ?)',
                  (nome, telefone, endereco))
-    conn.commit()
-    conn.close()
-    return redirect('/dashboard')
-
-# Marcar cesta como retirada
-@app.route('/marcar_retirada/<int:id>', methods=['POST'])
-def marcar_retirada(id):
-    if not session.get('logged_in'):
-        return redirect('/login')
-    conn = get_db()
-    conn.execute('UPDATE beneficiarios SET cesta_retirada = 1 WHERE id = ?', (id,))
     conn.commit()
     conn.close()
     return redirect('/dashboard')

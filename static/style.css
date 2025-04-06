@@ -138,13 +138,46 @@ select {
 /* Formulário de filtros */
 .filter-form {
     display: flex;
-    align-items: flex-end; /* Alinha os itens pela base */
+    align-items: flex-end;
     gap: 15px;
     background-color: #fff;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    border-top: none;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    margin-bottom: 5px;
+}
+
+.filter-group input[type="text"],
+.filter-group select,
+.filter-group button {
+    width: 250px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    height: 40px; /* Altura fixa para todos os elementos */
+    box-sizing: border-box; /* Garante que padding e border não afetem a altura */
+}
+
+.filter-group button {
+    width: 100px; /* Botão menor que os outros campos */
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.filter-group button:hover {
+    background-color: #27ae60;
 }
 
 .filter-group {
@@ -176,4 +209,22 @@ select {
 
 .filter-group button:hover {
     background-color: #27ae60;
+}
+
+/* Estilo para mensagem de erro */
+.error-message {
+    background-color: #ffe6e6;
+    color: #d63031;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    border: 1px solid #d63031;
+}
+
+.error-message span {
+    font-size: 18px;
 }
