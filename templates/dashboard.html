@@ -21,17 +21,24 @@
     </form>
 
     <!-- Filtros -->
+    <!-- Filtros -->
     <h2>Beneficiários Cadastrados</h2>
-    <form method="GET" action="/dashboard">
-        <label>Filtrar por Nome:</label>
-        <input type="text" name="nome" value="{{ nome_filtro }}">
-        <label>Status da Cesta:</label>
-        <select name="status">
-            <option value="todos" {% if status_filtro == 'todos' %}selected{% endif %}>Todos</option>
-            <option value="retirada" {% if status_filtro == 'retirada' %}selected{% endif %}>Retirada</option>
-            <option value="nao_retirada" {% if status_filtro == 'nao_retirada' %}selected{% endif %}>Não Retirada</option>
-        </select>
-        <button type="submit">Filtrar</button>
+    <form method="GET" action="/dashboard" class="filter-form">
+        <div class="filter-group">
+            <label for="nome">Filtrar por Nome:</label>
+            <input type="text" id="nome" name="nome" value="{{ nome_filtro }}">
+        </div>
+        <div class="filter-group">
+            <label for="status">Status da Cesta:</label>
+            <select id="status" name="status">
+                <option value="todos" {% if status_filtro == 'todos' %}selected{% endif %}>Todos</option>
+                <option value="retirada" {% if status_filtro == 'retirada' %}selected{% endif %}>Retirada</option>
+                <option value="nao_retirada" {% if status_filtro == 'nao_retirada' %}selected{% endif %}>Não Retirada</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <button type="submit">Filtrar</button>
+        </div>
     </form>
 
     <!-- Lista de Beneficiários -->

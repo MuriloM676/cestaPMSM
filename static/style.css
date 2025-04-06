@@ -135,27 +135,45 @@ select {
     background-color: #fff;
 }
 
-/* Ajustar o formulário de filtros */
-form[action="/dashboard"] {
+/* Formulário de filtros */
+.filter-form {
     display: flex;
-    flex-wrap: wrap;
+    align-items: flex-end; /* Alinha os itens pela base */
     gap: 15px;
-    align-items: flex-end;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-form[action="/dashboard"] label {
-    margin-bottom: 0;
+.filter-group {
+    display: flex;
+    flex-direction: column;
 }
 
-form[action="/dashboard"] input[type="text"] {
+.filter-group label {
+    margin-bottom: 5px;
+}
+
+.filter-group input[type="text"],
+.filter-group select {
     width: 200px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-form[action="/dashboard"] select {
-    width: 150px;
-}
-
-form[action="/dashboard"] button {
-    width: auto;
+.filter-group button {
     padding: 8px 15px;
+    background-color: #2ecc71;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 36px; /* Mesma altura dos inputs para alinhamento */
+}
+
+.filter-group button:hover {
+    background-color: #27ae60;
 }
