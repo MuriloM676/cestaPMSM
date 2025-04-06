@@ -66,6 +66,7 @@ def dashboard():
     
     # Parâmetros de filtro
     nome_filtro = request.args.get('nome', '').strip()
+    telefone_filtro = request.args.get('telefone', '').strip()  # Novo filtro por telefone
     status_filtro = request.args.get('status', 'todos')  # 'todos', 'retirada', 'nao_retirada'
 
     conn = get_db()
@@ -76,6 +77,11 @@ def dashboard():
     if nome_filtro:
         query += ' AND nome LIKE ?'
         params.append(f'%{nome_filtro}%')
+    
+    # Filtro por telefone
+    if telefone_filtro:
+        query += ' AND telefone LIKE ?'
+        params.append(f'%{telefone_filtro}%')
 
     # Filtro por status da cesta
     if status_filtro == 'retirada':
@@ -111,6 +117,7 @@ def cadastrar():
         return render_template('dashboard.html', 
                              beneficiarios=beneficiarios,
                              nome_filtro='', 
+                             telefone_filtro='',  # Adiciona o telefone_filtro
                              status_filtro='todos',
                              error_message='Erro: Este telefone já está cadastrado.')
     

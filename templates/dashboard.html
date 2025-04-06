@@ -28,11 +28,17 @@
     </form>
 
     <!-- Filtros -->
-    <h2>Beneficiários Cadastrados</h2>
+    <div class="section-title">
+        <h2>Beneficiários Cadastrados</h2>
+    </div>
     <form method="GET" action="/dashboard" class="filter-form">
         <div class="filter-group">
             <label for="nome">Filtrar por Nome:</label>
             <input type="text" id="nome" name="nome" value="{{ nome_filtro }}">
+        </div>
+        <div class="filter-group">
+            <label for="telefone">Filtrar por Telefone:</label>
+            <input type="text" id="telefone" name="telefone" value="{{ telefone_filtro }}">
         </div>
         <div class="filter-group">
             <label for="status">Status da Cesta:</label>
