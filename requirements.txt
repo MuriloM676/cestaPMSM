@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 Flask==2.3.2
 bcrypt==4.0.1
+=======
+Flask==2.3.2
+mysql-connector-python==8.0.33  # Necessário se usar MySQL
+>>>>>>> 24976408db65cbc42d22fb9409a5c7c9b793ef89
