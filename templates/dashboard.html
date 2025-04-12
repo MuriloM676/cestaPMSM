@@ -1,65 +1,83 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Dashboard</h1>
-    
-    <!-- Formulário de Cadastro (apenas para administradores) -->
-    {% if session['role'] == 'admin' %}
-    <div class="section-title">
-        <h2>Cadastrar Novo Beneficiário</h2>
-    </div>
-    {% if error_message %}
-        <div class="error-message">
-            <span>⚠️</span> {{ error_message }}
-        </div>
-    {% endif %}
-    <form method="POST" action="/cadastrar">
-        <label>Nome:</label>
-        <input type="text" name="nome" required>
-        <label>Telefone:</label>
-        <input type="text" name="telefone" required>
-        <label>Endereço:</label>
-        <textarea name="endereco" required></textarea>
-        <button type="submit">Cadastrar</button>
-    </form>
-    {% endif %}
-    
-    <!-- Filtros -->
-    <div class="section-title">
-        <h2>Beneficiários Cadastrados</h2>
-        <a href="{{ url_for('historico') }}" class="history-link">Ver Histórico de Retiradas</a>
-    </div>
-    <form method="GET" action="/dashboard" class="filter-form">
-        <div class="filter-group">
-            <label for="nome">Filtrar por Nome:</label>
-            <input type="text" id="nome" name="nome" value="{{ nome_filtro }}">
-        </div>
-        <div class="filter-group">
-            <label for="telefone">Filtrar por Telefone:</label>
-            <input type="text" id="telefone" name="telefone" value="{{ telefone_filtro }}">
-        </div>
-        <div class="filter-group">
-            <label for="status">Status da Cesta:</label>
-            <select id="status" name="status">
-                <option value="todos" {% if status_filtro == 'todos' %}selected{% endif %}>Todos</option>
-                <option value="retirada" {% if status_filtro == 'retirada' %}selected{% endif %}>Retirada</option>
-                <option value="nao_retirada" {% if status_filtro == 'nao_retirada' %}selected{% endif %}>Não Retirada</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <button type="submit">Filtrar</button>
-        </div>
-    </form>
+{% extends 'base.html' %}
 
-    <!-- Tabela de beneficiários -->
-    <table>
-        <thead>
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<!-- Formulário de Cadastro (apenas para administradores) -->
+{% if session['role'] == 'admin' %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Cadastrar Novo Beneficiário</h3>
+    </div>
+    <div class="card-body">
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ error_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('cadastrar') }}">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" required>
+            </div>
+            <div class="mb-3">
+                <label for="endereco" class="form-label">Endereço</label>
+                <textarea class="form-control" id="endereco" name="endereco" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">
+                <i class="fas fa-plus me-2"></i>Cadastrar
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0">Beneficiários Cadastrados</h3>
+        <a href="{{ url_for('historico') }}" class="btn btn-info">
+            <i class="fas fa-history me-2"></i>Ver Histórico de Retiradas
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('dashboard') }}" class="row g-3">
+            <div class="col-12 col-md-4">
+                <label for="nome" class="form-label">Filtrar por Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{ nome_filtro }}">
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="telefone" class="form-label">Filtrar por Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" value="{{ telefone_filtro }}">
+            </div>
+            <div class="col-12 col-md-3">
+                <label for="status" class="form-label">Status da Cesta</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="todos" {% if status_filtro == 'todos' %}selected{% endif %}>Todos</option>
+                    <option value="retirada" {% if status_filtro == 'retirada' %}selected{% endif %}>Retirada</option>
+                    <option value="nao_retirada" {% if status_filtro == 'nao_retirada' %}selected{% endif %}>Não Retirada</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-filter me-2"></i>Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabela de Beneficiários -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
@@ -79,8 +97,10 @@
                 <td>{{ 'Sim' if beneficiario['cesta_retirada'] else 'Não' }}</td>
                 <td>
                     {% if not beneficiario['cesta_retirada'] %}
-                    <form method="POST" action="{{ url_for('marcar_retirada', id=beneficiario['id']) }}" onsubmit="return confirm('Tem certeza que deseja marcar esta cesta como retirada?');">
-                        <button type="submit">Marcar como Retirada</button>
+                    <form method="POST" action="{{ url_for('marcar_retirada', id=beneficiario['id']) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Tem certeza que deseja marcar esta cesta como retirada?');">
+                            <i class="fas fa-check me-2"></i>Marcar como Retirada
+                        </button>
                     </form>
                     {% endif %}
                 </td>
@@ -88,20 +108,36 @@
             {% endfor %}
         </tbody>
     </table>
-    
-    <!-- Paginação -->
-    {% if total_pages > 1 %}
-    <div class="pagination">
-        {% if page > 1 %}
-        <a href="{{ url_for('dashboard', page=page-1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}" class="pagination-link">Página Anterior</a>
-        {% endif %}
-        <span>Página {{ page }} de {{ total_pages }}</span>
-        {% if page < total_pages %}
-        <a href="{{ url_for('dashboard', page=page+1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}" class="pagination-link">Próxima Página</a>
-        {% endif %}
-    </div>
-    {% endif %}
-    
-    <a href="{{ url_for('logout') }}">Sair</a>
-</body>
-</html>
+</div>
+
+<!-- Paginação -->
+{% if total_pages > 1 %}
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('dashboard', page=page-1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+                <span class="page-link">Página {{ page }} de {{ total_pages }}</span>
+            </li>
+            {% if page < total_pages %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('dashboard', page=page+1, nome=nome_filtro, telefone=telefone_filtro, status=status_filtro) }}">Próxima</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Próxima</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}
+{% endblock %}
